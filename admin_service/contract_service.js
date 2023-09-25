@@ -8,10 +8,10 @@ var dotenv = require('dotenv')
 var dotenvExpand = require('dotenv-expand')
 const { Web3 } = require('web3');
 
-var myEnv = dotenv.config({path: '../.env'});
+var myEnv = dotenv.config({path: './.env'});
 dotenvExpand.expand(myEnv)
 
-const MyContract = require('./truffle-artifacts/Election.json');
+const MyContract = require(process.env['ADMIN_TRUFFLE_ARTIFACTS_PATH']);
 const privateKey = process.env['ADMIN_PRIVATE_KEY'];
 const ganacheURL = process.env['GANACHE_URL'];
 
