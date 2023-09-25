@@ -1,0 +1,22 @@
+{
+  "name": "admin_service",
+  "version": "0.1.0",
+  "description": "Admin Service For decentralized voting app.",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"node websocket-server.js\" \"node index.js\""
+  },
+  "keywords": [],
+  "author": "Sambhav Dave <2267358@swansea.ac.uk>",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "concurrently": "^8.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "dotenv-expand": "^10.0.0",
+    "express": "^4.18.2",
+    "web3": "^4.1.1",
+    "ws": "^8.13.0"
+  }
+}
