@@ -15,14 +15,12 @@ app.use(cors());
 app.post('/check-voter', async (request, response) => {
     const validVoter = {
         passportNoPattern: /^[A-Z]{2}\d{6}$/, //Example: AB123456
-        age: 18,
         voterPublicKey: /^0x[a-fA-F0-9]{40}$/
     };
 
-    const { passportNo, age, voterPublicKey } = request.body;
+    const { passportNo, voterPublicKey } = request.body;
 
     if (validVoter.passportNoPattern.test(passportNo)
-        && age >= validVoter.age
         && validVoter.voterPublicKey.test(voterPublicKey)) {
         try {
             const result = await sendDataToBlockchain('authoriseVoter', voterPublicKey);
