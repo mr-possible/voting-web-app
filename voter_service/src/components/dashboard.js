@@ -27,6 +27,7 @@ export default function Dashboard() {
         // </div>
         <>
             <Header />
+            <br />
             <div className="container is-fluid">
                 <h1 className="title is-4 has-text-centered">Welcome Voter ! What would you like to do ?</h1>
                 <div className="columns">
