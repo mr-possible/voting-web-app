@@ -35,6 +35,7 @@ export const establishConnectionWithWeb3 = async () => {
     );
 
     isSetupDone = true;
+    console.log("Web3 Client connected!")
 };
 
 export const getDataFromBlockchain = async (functionName, functionParams) => {
@@ -42,9 +43,13 @@ export const getDataFromBlockchain = async (functionName, functionParams) => {
         await establishConnectionWithWeb3();
     }
 
-    return myContract.methods[functionName](...functionParams)
+    const val = await myContract.methods[functionName](...functionParams)
         .call()
-        .then((e) => { console.log(e); });
+        .catch((error) => {
+            console.error('Error calling smart contract method:', error);
+            throw error;
+        });
+    return val;
 };
 
 export const sendDataToBlockchain = async (functionName, functionParams) => {
