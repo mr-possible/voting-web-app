@@ -3,30 +3,11 @@ References for this file:
     Bulma CSS: https://bulma.io/documentation/
 */
 
-import React, { useState } from 'react';
-import { getDataFromBlockchain, sendDataToBlockchain } from '../services/web3Client';
-import Header from './header';
+import React from 'react';
 
 export default function Dashboard() {
-    const [start, setStart] = useState(false);
-
     return (
-        // <div className="voter-dashboard">
-        //     {
-        //         !start ? (
-        //             <button onClick={() => getDataFromBlockchain("getElectionName", [])}>Test Get</button>
-        //         ) : (
-        //             <p>Hello!</p>
-        //         )}
-        //         {
-        //         !start ? (
-        //             <button onClick={() => sendDataToBlockchain("startTheElection", ["Sample"])}>Test send</button>
-        //         ) : (
-        //             <p>Hello!</p>
-        //         )}
-        // </div>
         <>
-            <Header />
             <br />
             <div className="container is-fluid">
                 <h1 className="title is-4 has-text-centered">Welcome Voter ! What would you like to do ?</h1>
