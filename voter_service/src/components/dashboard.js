@@ -3,9 +3,42 @@ References for this file:
     Bulma CSS: https://bulma.io/documentation/
 */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+const socket = new WebSocket('ws://localhost:8081');
 
 export default function Dashboard() {
+    const [electionInProgress, setElectionInProgress] = useState(false);
+
+    useEffect(() => {
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            console.log('Received WebSocket message:', data);
+            setElectionInProgress(data['electionInProgress']);
+        };
+
+        socket.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        return () => {
+            if (!socket.OPEN) {
+                socket.close();
+            }
+        }
+    });
+
+    const votePreCheck = (e) => {
+        if (electionInProgress == false) {
+            // Prompt user that admin has not started the election
+            alert("Election is not started by the admin yet!");
+            e.preventDefault();
+        } else {
+            // Open Voting Screen
+            return true;
+        }
+    }
+
     return (
         <>
             <br />
@@ -42,7 +75,9 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <footer className="card-footer has-text-centered">
-                                <a href="#" className="title is-4 card-footer-item">Cast Vote</a>
+                                <a href="/voting_page"
+                                    onClick={votePreCheck}
+                                    className="title is-4 card-footer-item">Cast Vote</a>
                             </footer>
                         </div>
                     </div>
