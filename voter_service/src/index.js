@@ -3,10 +3,52 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import VoterLogin from './components/login';
+import Dashboard from './components/dashboard';
+import Candidates from './components/candidates';
+import VotingScreen from './components/voting-screen';
+import AboutMe from './components/aboutme';
+
+const router = createBrowserRouter([
+  {
+    // These are the routes of our project. 
+    // / is the parent root and children[] consists of the subsequent ones inside it.
+
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "",
+        element: <VoterLogin />
+      },
+      {
+        path: "dashboard",
+        element: <Dashboard /> // TODO
+      },
+      {
+        path: "know_candidate",
+        element: <Candidates />
+      },
+      {
+        path: "vote",
+        element: <VotingScreen />
+      },
+      {
+        path: "aboutme",
+        element: <AboutMe />
+      }
+    ]
+  },
+]);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
