@@ -7,9 +7,6 @@ export default function VoterLogin() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log('Voter Email Address: ', voterEmail);
-        // console.log('Voter Passport No: ', voterPassport);
-        // console.log('Voter Pub Key: ', voterPubKey);
         try {
             // 1. Authorise the voter
             const response = await fetch('http://127.0.0.1:8080/check-voter', {
@@ -17,11 +14,12 @@ export default function VoterLogin() {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ passportNo: voterPassport, voterPublicKey: voterPubKey }),
+                body: JSON.stringify({ email: voterEmail, passportNo: voterPassport, voterPublicKey: voterPubKey }),
             });
             if (response.ok) {
-                // 2. Show Dashboard to the User
-                console.log("Voter Authorised");
+                /******************* TODO *******************/
+                // 2. Show Dashboard to the User 
+                console.log("Voter Authorised and Entry made to the database...");
             }
         } catch (error) {
             console.log('Error: ', error);
@@ -42,7 +40,8 @@ export default function VoterLogin() {
                                             <input
                                                 id="voterEmail"
                                                 type="email"
-                                                placeholder="e.g. bobsmith@gmail.com"
+                                                placeholder="e.g. abcd@test.com"
+                                                value={voterEmail}
                                                 className="input"
                                                 onChange={(e) => setVoterEmail(e.target.value)}
                                                 required />
@@ -55,6 +54,7 @@ export default function VoterLogin() {
                                                 id="voterPassport"
                                                 type="password"
                                                 className="input"
+                                                value={voterPassport}
                                                 onChange={(e) => setVoterPassport(e.target.value)}
                                                 required />
                                         </div>
@@ -66,6 +66,7 @@ export default function VoterLogin() {
                                                 id="voterPubKey"
                                                 type="password"
                                                 className="input"
+                                                value={voterPubKey}
                                                 onChange={(e) => setVoterPubKey(e.target.value)}
                                                 required />
                                         </div>
