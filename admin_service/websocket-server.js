@@ -24,7 +24,7 @@ function electionNotStarted() {
     });
 }
 
-function startTheElection() {    
+function startTheElection() {
     map.set('electionInProgress', true);
     setTimeout(() => {
         transmitStatus(map);
@@ -40,7 +40,12 @@ function endTheElection() {
 
 function sendInitialElectionStatus(client) {
     // Whenever client connects, he will get the value of electionInProgress at that time.
-    map.set('electionInProgress', map.get('electionInProgress'));
+    if (map.size === 0) {
+        map.set('electionInProgress', false);
+    } else {
+        map.set('electionInProgress', map.get('electionInProgress'));
+    }
+
     client.send(JSON.stringify(Object.fromEntries(map)));
 }
 
@@ -53,10 +58,10 @@ wss.on('connection', (client) => {
             const data = JSON.parse(message);
             switch (data.action) {
                 case 'start_election':
-                    startTheElection();                    
+                    startTheElection();
                     break;
                 case 'end_election':
-                    endTheElection();                
+                    endTheElection();
                     break;
                 default:
                     electionNotStarted();
