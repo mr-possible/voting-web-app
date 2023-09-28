@@ -4,11 +4,24 @@ References for this file:
 */
 
 import React, { useEffect, useState } from 'react';
-
-const socket = new WebSocket('ws://localhost:8081');
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
+    const [socket, setSocket] = useState(new WebSocket('ws://localhost:8081'));
     const [electionInProgress, setElectionInProgress] = useState(false);
+    const [hasAlreadyVoted, setHasAlreadyVoted] = useState(false);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!location.state) {
+            navigate("/");
+        }
+        // console.log(location.state.userEmail);
+        // console.log(location.state.passport);
+        // console.log(location.state.pubKey);
+    }, []);
 
     useEffect(() => {
         socket.onmessage = (event) => {
@@ -58,7 +71,7 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <footer className="card-footer">
-                                <a href="#" className="title is-4 card-footer-item">Know Candidate</a>
+                                <Link to="#" className="title is-4 card-footer-item">Know Candidate</Link>
                             </footer>
                         </div>
                     </div>
@@ -75,9 +88,9 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <footer className="card-footer has-text-centered">
-                                <a href="/voting_page"
+                                <Link to="/vote"
                                     onClick={votePreCheck}
-                                    className="title is-4 card-footer-item">Cast Vote</a>
+                                    className="title is-4 card-footer-item">Cast Vote</Link>
                             </footer>
                         </div>
                     </div>
@@ -94,7 +107,7 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <footer className="card-footer has-text-centered">
-                                <a href="#" className="title is-4 card-footer-item">See Result</a>
+                                <Link to="#" className="title is-4 card-footer-item">See Result</Link>
                             </footer>
                         </div>
                     </div>
