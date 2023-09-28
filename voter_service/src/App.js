@@ -1,12 +1,14 @@
 import Header from "./components/header";
+import Footer from "./components/footer";
+import { Outlet } from "react-router-dom";
 
-function App() {
+
+export default function App() {
   return (
     <div className="App">
       <Header />
-      <h2>This is main App.js</h2>
+      <Outlet />  {/* This is a dynamic area  - meaning here our components will reside depending on the route. */}
+      <Footer />
     </div>
   );
 }
-
-export default App;
