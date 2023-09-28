@@ -1,7 +1,24 @@
+/**
+ * References for this file:
+ * 
+ * 
+ * DB connection => https://www.kindsonthegenius.com/db-migrate-simplified-how-to-generate-posgresql-database-from-node-js/
+ * 
+ */
+
 const express = require('express');
 const cors = require('cors');
-const WebSocket = require('ws');
+const { Client } = require('pg');
 const { sendDataToBlockchain } = require('./contract_service');
+
+const client = new Client({
+    host: "localhost",
+    port: 5432,
+    user: "sambhavdave",
+    password: "sambhav",
+    database: "voting_webapp"
+});
+client.connect();
 
 const app = express();
 
@@ -18,16 +35,48 @@ app.post('/check-voter', async (request, response) => {
         voterPublicKey: /^0x[a-fA-F0-9]{40}$/
     };
 
-    const { passportNo, voterPublicKey } = request.body;
+    const { email, passportNo, voterPublicKey: voterPubKey } = request.body;
 
     if (validVoter.passportNoPattern.test(passportNo)
-        && validVoter.voterPublicKey.test(voterPublicKey)) {
+        && validVoter.voterPublicKey.test(voterPubKey)) {
+
         try {
-            const result = await sendDataToBlockchain('authoriseVoter', voterPublicKey);
+            const result = await sendDataToBlockchain('authoriseVoter', voterPubKey);
             response.status(200).json({ message: 'Transaction successful', result });
+
+            let is_voter_exists_query = `SELECT * FROM voter WHERE passport = '${passportNo}'`;
+            let voter_reg_query = `INSERT INTO voter (email, passport, pubkey, has_voted)
+                                    VALUES ('${email}', '${passportNo}', '${voterPubKey}', false)`;
+
+            let flag = false;
+            client.query(is_voter_exists_query, (err, res) => {
+                if (err) {
+                    console.log(`Error => ${err.message}`);
+                } else {                    
+                    if (res.rowCount > 0) {
+                        flag = true;
+                    }
+                }                
+                if (flag == false) {                
+                    /**
+                    *   Once authorised, put the voter in the database 
+                    *   with initial voting status 
+                    *   as false (if already entry is not there). 
+                    */
+                    client.query(voter_reg_query, (err, res) => {
+                        if (!err) {
+                            console.log('Entry made to the database!');
+                        } else {
+                            console.log(`Error => ${err.message}`);
+                        }
+                    });
+                }
+            });
         } catch (error) {
             console.error('Error: ', error);
             response.status(500).json({ message: 'Transaction failed', error: error.message });
+        } finally {
+            client.end;
         }
     } else {
         response.status(400).json({ error: 'Check voter info, that must be either invalid or the voter is in-eligible to vote!' });
