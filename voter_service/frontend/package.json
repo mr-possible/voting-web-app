@@ -13,7 +13,7 @@
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4",
     "web3": "^1.5.2",
-    "truffle-artifacts": "../truffle-artifacts/Election.json"
+    "truffle-artifacts": "../../truffle-artifacts/Election.json"
   },
   "scripts": {
     "start": "react-scripts start",
