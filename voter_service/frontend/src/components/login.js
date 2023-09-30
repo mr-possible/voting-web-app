@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function VoterLogin() {
     const [voterEmail, setVoterEmail] = useState('');
@@ -12,23 +13,29 @@ export default function VoterLogin() {
         e.preventDefault();
         try {
             // 1. Authorise the voter
-            const response = await fetch('http://127.0.0.1:8082/login', {
+            const response = await fetch('/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ email: voterEmail, passportNo: voterPassport, voterPublicKey: voterPubKey }),
+                body: JSON.stringify(
+                    {
+                        email: voterEmail,
+                        passportNo: voterPassport,
+                        voterPublicKey: voterPubKey
+                    }
+                ),
             });
             if (response.status === 200) {
-                /******************* TODO *******************/
-                // 2. Show Dashboard to the User                
-                navigate("/dashboard", {
-                    state: {
-                        userEmail: voterEmail,
-                        passport: voterPassport,
-                        pubKey: voterPubKey
-                    }
-                });
+                // 2. Show Dashboard to the User
+                axios
+                    .get('/dashboard')
+                    .then(() => {                        
+                        navigate("/dashboard");
+                    })
+                    .catch(err => {
+                        throw err;
+                    });
             }
         } catch (error) {
             console.log('Error: ', error);
@@ -42,7 +49,7 @@ export default function VoterLogin() {
                     <div className="container">
                         <div className="columns is-centered">
                             <div className="column is-5-tablet is-4-desktop is-3-widescreen">
-                                <form onSubmit={handleSubmit} action="/dashboard" className="box">
+                                <form onSubmit={handleSubmit} className="box">
                                     <div className="field">
                                         <label htmlFor="voterEmail" className="label">Voter Email Address</label>
                                         <div className="control">
