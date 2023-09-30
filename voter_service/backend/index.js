@@ -1,79 +1,92 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-const { Client } = require('pg');
-const session = require('express-session');
-const pgSession = require('connect-pg-simple')(session);
-const pgp = require('pg-promise')();
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
-const client = new Client({
-    host: "localhost",
-    port: 5432,
-    user: "sambhavdave",
-    password: "sambhav",
-    database: "voting_webapp"
-});
-client.connect();
+const secret_key = "csm20-secret-key";
+let voter = {};
 
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-app.use(
-    session({
-        store: new pgSession({
-            pool: pgp('postgres://sambhavdave:sambhav@localhost:5432/voting_webapp'),
-            tableName: 'voter_session',
-        }),
-        secret: 'csm20',
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            maxAge: 2 * 24 * 60 * 60 * 1000,
-        },
-    })
-);
-
-function isVoterAuthenticated(request, response, next) {
-    if (request.session.user) {
-        // Proceed
+function authJWTToken(request, response, next) {
+    const myToken = request.cookies.token;
+    try {
+        verifiedToken = jwt.verify(myToken, secret_key);
+        flag = true;
         next();
-    } else {
-        // Redirect to voter login page
-        response.redirect("/");
+    } catch (err) {
+        response.status(401).json(
+            {
+                message: "Unauthorized"
+            }
+        )
     }
 }
 
 /************************************ API ENDPOINTS ************************************/
+app.post('/login', (request, response) => {
+    const { email, passportNo, voterPublicKey } = request.body;
+    voter = { email, passportNo, voterPublicKey }
 
-// Endpoint to check the voter info in order for him/her to be able to vote in the flutter app.
-app.post('/login', async (request, response) => {
-    const adminEndpoint = 'http://127.0.0.1:8080/check-voter';
-
-    try {
-        const res = await axios.post(adminEndpoint, request.body);
-        if (res.status === 200) {
-            response.status(200).json({ message: 'Request successful!' });
-        } else {
-            response.status(500).json({ message: 'Please contact Election administrator!' });
-        }
-    } catch (error) {
-        response.status(500).json({ message: 'Internal Server Error' });
-    }
+    axios
+        .post('http://127.0.0.1:8080/check-voter', voter, {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then((res) => {
+            const token = jwt.sign({ data: voter }, secret_key);
+            response.cookie("token", token, {
+                httpOnly: true,
+                secure: true
+            });
+            response.status(200).json(
+                {
+                    email: voter.email,
+                    message: 'Voter Authorised.'
+                }
+            );
+        })
+        .catch((error) => {
+            response.status(500).json(
+                {
+                    error,
+                    message: 'Internal Server Error. Please contact election administrator.'
+                }
+            );
+        })
 });
 
-app.get('/logout', async (request, response) => {
-    request.session.destroy((err) => {
-        if (err) {
-            console.error('Error destroying session:', err);
-            res.sendStatus(500);
-        } else {
-            res.redirect("/");
+app.get('/dashboard', authJWTToken, (req, res) => {
+    res.status(200).json(
+        {
+            message: 'On Dashboard Page'
         }
-    });
+    );
+});
 
+app.get('/vote', authJWTToken, (req, res) => {
+    res.status(200).json(
+        {
+            message: 'On Voting Page'
+        }
+    );
+});
+
+app.get('/logout', (req, res) => {
+    res.clearCookie("token");
+    res.status(200).json(
+        {
+            message: 'User Logged out.'
+        }
+    );
 });
 
 const PORT = 8082;
