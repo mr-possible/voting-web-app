@@ -14,14 +14,11 @@ export default function Dashboard() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        if (!location.state) {
-            navigate("/");
-        }
-        // console.log(location.state.userEmail);
-        // console.log(location.state.passport);
-        // console.log(location.state.pubKey);
-    }, []);
+    // useEffect(() => {
+    //     if (!location.state) {
+    //         navigate("/");
+    //     }
+    // }, []);
 
     useEffect(() => {
         socket.onmessage = (event) => {
@@ -62,7 +59,7 @@ export default function Dashboard() {
                         <div className="card">
                             <div className="card-image">
                                 <figure className="image is-4by3">
-                                    <img src="{{ asset('images/dashboard-search-book.jpg') }}" alt="Placeholder image" />
+                                    <img alt="Placeholder image" />
                                 </figure>
                             </div>
                             <div className="card-content has-text-centered">
@@ -79,7 +76,7 @@ export default function Dashboard() {
                         <div className="card">
                             <div className="card-image">
                                 <figure className="image is-4by3">
-                                    <img src="{{ asset('images/dashboard-read-review.jpg') }}" alt="Placeholder image" />
+                                    <img alt="Placeholder image" />
                                 </figure>
                             </div>
                             <div className="card-content has-text-centered">
@@ -98,7 +95,7 @@ export default function Dashboard() {
                         <div className="card">
                             <div className="card-image">
                                 <figure className="image is-4by3">
-                                    <img src="{{ asset('images/dashboard-submit-review.jpg') }}" alt="Placeholder image" />
+                                    <img alt="Placeholder image" />
                                 </figure>
                             </div>
                             <div className="card-content has-text-centered">
