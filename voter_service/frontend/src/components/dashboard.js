@@ -4,21 +4,12 @@ References for this file:
 */
 
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
     const [socket, setSocket] = useState(new WebSocket('ws://localhost:8081'));
     const [electionInProgress, setElectionInProgress] = useState(false);
     const [hasAlreadyVoted, setHasAlreadyVoted] = useState(false);
-
-    const location = useLocation();
-    const navigate = useNavigate();
-
-    // useEffect(() => {
-    //     if (!location.state) {
-    //         navigate("/");
-    //     }
-    // }, []);
 
     useEffect(() => {
         socket.onmessage = (event) => {
