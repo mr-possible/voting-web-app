@@ -3,10 +3,27 @@ References/Credits for this file:
     Bulma CSS: https://bulma.io/documentation/
 */
 
-import React from 'react';
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Header() {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const handleLogout = () => {
+        axios
+            .get('/logout')
+            .then(() => {
+                navigate("/");
+            })
+            .catch(err => {
+                throw err;
+            });
+    }
+
+    const isWelcomePage = location.pathname === '/';
+
     return (
         <header className="header">
             <nav className="navbar is-link" role="navigation" aria-label="main navigation">
@@ -33,13 +50,15 @@ export default function Header() {
                     <div className="navbar-end">
                         <div className="navbar-item">
                             <div className="buttons">
-                                <Link to="#" className="button is-light">Log out</Link>
+                                <button
+                                    onClick={handleLogout}
+                                    className={isWelcomePage ? "button is-light is-hidden" : "button is-light"}>Log out</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </nav>
-        </header>
+        </header >
 
     );
 }
