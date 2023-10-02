@@ -30,7 +30,7 @@ export default function VoterLogin() {
                 // 2. Show Dashboard to the User
                 axios
                     .get('/dashboard')
-                    .then(() => {                        
+                    .then((res) => {                        
                         navigate("/dashboard");
                     })
                     .catch(err => {

@@ -4,12 +4,26 @@ References for this file:
 */
 
 import React, { useEffect, useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 export default function Dashboard() {
     const [socket, setSocket] = useState(new WebSocket('ws://localhost:8081'));
     const [electionInProgress, setElectionInProgress] = useState(false);
     const [hasAlreadyVoted, setHasAlreadyVoted] = useState(false);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        axios
+            .get('/dashboard')
+            .then((res) => {
+                console.log('Authenticated Voter has logged in.')
+            }).catch(() => {
+                navigate("/");
+            });
+    }, []);
+
 
     useEffect(() => {
         socket.onmessage = (event) => {

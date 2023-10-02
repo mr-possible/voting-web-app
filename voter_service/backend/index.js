@@ -26,7 +26,7 @@ function authJWTToken(request, response, next) {
             {
                 message: "Unauthorized"
             }
-        )
+        );
     }
 }
 
