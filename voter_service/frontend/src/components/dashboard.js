@@ -50,7 +50,8 @@ export default function Dashboard() {
                         <div className="card">
                             <div className="card-image">
                                 <figure className="image is-4by3">
-                                    <img alt="Placeholder image" />
+                                    {/* Image credits: <a href="https://www.freepik.com/free-vector/foam-fingers-pointing-happy-politician_42675003.htm#query=politician&position=1&from_view=search&track=sph">Image by Verazinha</a> on Freepik */}
+                                    <img src={process.env.PUBLIC_URL + "/images/know-candidate.jpg"} alt="Placeholder image" />
                                 </figure>
                             </div>
                             <div className="card-content has-text-centered">
@@ -67,7 +68,8 @@ export default function Dashboard() {
                         <div className="card">
                             <div className="card-image">
                                 <figure className="image is-4by3">
-                                    <img alt="Placeholder image" />
+                                    {/* Image credits: <a href="https://www.freepik.com/free-vector/hand-drawing-illustration-election-concept_2803348.htm#query=voting%20cartoon&position=5&from_view=keyword&track=ais">Image by rawpixel.com</a> on Freepik */}
+                                    <img src={process.env.PUBLIC_URL + "/images/cast-vote.jpg"} alt="Placeholder image" />
                                 </figure>
                             </div>
                             <div className="card-content has-text-centered">
@@ -86,7 +88,8 @@ export default function Dashboard() {
                         <div className="card">
                             <div className="card-image">
                                 <figure className="image is-4by3">
-                                    <img alt="Placeholder image" />
+                                    {/* Image credits: Image by <a href="https://www.freepik.com/free-photo/mystery-box-with-gifts-concept_36298591.htm#query=who%20won&position=18&from_view=search&track=ais">Freepik</a> */}
+                                    <img src={process.env.PUBLIC_URL + "/images/who-won.jpg"} alt="Placeholder image" />
                                 </figure>
                             </div>
                             <div className="card-content has-text-centered">
