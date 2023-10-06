@@ -74,7 +74,7 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <footer className="card-footer">
-                                <Link to="#" className="title is-4 card-footer-item">Know Candidate</Link>
+                                <Link to="/know_candidate" className="title is-4 card-footer-item">Know Candidate</Link>
                             </footer>
                         </div>
                     </div>
