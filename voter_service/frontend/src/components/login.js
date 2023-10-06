@@ -30,7 +30,7 @@ export default function VoterLogin() {
                 // 2. Show Dashboard to the User
                 axios
                     .get('/dashboard')
-                    .then((res) => {                        
+                    .then((res) => {
                         navigate("/dashboard");
                     })
                     .catch(err => {
@@ -42,9 +42,18 @@ export default function VoterLogin() {
         }
     }
 
+    const styles = {
+        backgroundImage: "url('https://images.unsplash.com/photo-1651766013569-e5789b7cdddf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3174&q=80",
+        minHeight: '100vh',        
+        marginTop: '-80px',        
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
+    }
+
     return (
-        <div className="voter-login-form">
-            <section className="hero is-primary is-fullheight">
+        <div className="voter-login-form" style={styles}>
+            <section className="hero  is-fullheight">
                 <div className="hero-body">
                     <div className="container">
                         <div className="columns is-centered">
@@ -98,6 +107,6 @@ export default function VoterLogin() {
                     </div>
                 </div>
             </section>
-        </div>
+        </div >
     );
 }
