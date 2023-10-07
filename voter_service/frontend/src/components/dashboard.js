@@ -4,7 +4,7 @@ References for this file:
 */
 
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
 
 export default function Dashboard() {
@@ -13,6 +13,17 @@ export default function Dashboard() {
     const [hasAlreadyVoted, setHasAlreadyVoted] = useState(false);
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        axios
+            .post('/voter-details', location.state.data)
+            .then((res) => {
+                setHasAlreadyVoted(res.data.has_voted);
+            }).catch((err) => {
+                console.error(err);
+            });
+    }, []);
 
     useEffect(() => {
         axios
@@ -92,9 +103,18 @@ export default function Dashboard() {
                                 </div>
                             </div>
                             <footer className="card-footer has-text-centered">
-                                <Link to="/vote"
-                                    onClick={votePreCheck}
-                                    className="title is-4 card-footer-item">Cast Vote</Link>
+                                {
+                                    hasAlreadyVoted === true ?
+                                        (
+                                            <Link to="#"
+                                                className="title is-4 card-footer-item has-text-danger">Already Voted</Link>
+                                        ) :
+                                        (
+                                            <Link to="/vote"
+                                                onClick={votePreCheck}
+                                                className="title is-4 card-footer-item">Cast Vote</Link>
+                                        )
+                                }
                             </footer>
                         </div>
                     </div>
