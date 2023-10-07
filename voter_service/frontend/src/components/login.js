@@ -31,7 +31,7 @@ export default function VoterLogin() {
                 axios
                     .get('/dashboard')
                     .then((res) => {
-                        navigate("/dashboard");
+                        navigate("/dashboard", { state: { data: { voterEmail, voterPassport, voterPubKey } } });
                     })
                     .catch(err => {
                         throw err;
@@ -44,8 +44,8 @@ export default function VoterLogin() {
 
     const styles = {
         backgroundImage: "url('https://images.unsplash.com/photo-1651766013569-e5789b7cdddf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3174&q=80",
-        minHeight: '100vh',        
-        marginTop: '-80px',        
+        minHeight: '100vh',
+        marginTop: '-80px',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundAttachment: 'fixed'
