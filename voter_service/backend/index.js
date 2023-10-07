@@ -3,9 +3,19 @@ const axios = require('axios');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
+const { Client } = require('pg');
 
 const secret_key = "csm20-secret-key";
 let voter = {};
+
+const client = new Client({
+    host: "localhost",
+    port: 5432,
+    user: "sambhavdave",
+    password: "sambhav",
+    database: "voting_webapp"
+});
+client.connect();
 
 const app = express();
 
@@ -70,6 +80,31 @@ app.get('/dashboard', authJWTToken, (req, res) => {
             message: 'On Dashboard Page'
         }
     );
+});
+
+app.post('/voter-details', authJWTToken, (req, res) => {
+    const { voterPassport } = req.body;
+
+    // Make database connection and check whether this email, passport and pubkey exists.
+    let is_voter_exists_query = `SELECT has_voted FROM voter WHERE passport = '${voterPassport}'`;
+    client.query(is_voter_exists_query, (err, result) => {
+        if (err) {
+            console.log(`Error => ${err.message}`);
+            res.status(404).json(
+                {
+                    message: 'Voter data not found'
+                }
+            );
+        } else {
+            const data = result.rows.map(row => row.has_voted);
+            res.status(200).json(
+                {
+                    has_voted: data[0]
+                }
+            );
+        }
+    });
+
 });
 
 app.get('/vote', authJWTToken, (req, res) => {
