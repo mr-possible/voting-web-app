@@ -44,8 +44,6 @@ function VotingScreen() {
 
     // Function to handle candidate vote selection
     const handleCastVote = async (candidateId, candidateName) => {
-        console.log("Selected candidate id: " + candidateId);
-        console.log("Selected candidate name: " + candidateName);
         //1. Make smart contract function call.
         await sendDataToBlockchain("vote", [candidateId]);
 
