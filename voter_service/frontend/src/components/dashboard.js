@@ -16,13 +16,16 @@ export default function Dashboard() {
     const location = useLocation();
 
     useEffect(() => {
-        axios
-            .post('/voter-details', location.state.data)
-            .then((res) => {
-                setHasAlreadyVoted(res.data.has_voted);
-            }).catch((err) => {
-                console.error(err);
-            });
+        if (location.state.data) {
+            axios
+                .post('/voter-details', location.state.data)
+                .then((res) => {
+                    setHasAlreadyVoted(res.data.has_voted);
+                }).catch((err) => {
+                    console.error(err);
+                });
+        }
+
     }, []);
 
     useEffect(() => {
