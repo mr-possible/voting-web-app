@@ -4,13 +4,25 @@ References/Credits for this file:
 */
 
 import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from 'axios';
 import { getDataFromBlockchain, sendDataToBlockchain } from '../services/web3Client';
 
-function VotingScreen() {
+function VotingScreen(props) {
     const [candidateCount, setCandidateCount] = useState();
     const [candidates, setCandidates] = useState([]);
     const [selectedCandidate, setSelectedCandidate] = useState(null);
     const [selectedCandidateName, setSelectedCandidateName] = useState('');
+    const [voterPassport, setVoterPassport] = useState('');
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state) {
+            setVoterPassport(location.state);
+        }
+    }, []);
 
     useEffect(() => {
         async function fetchCandidatesData() {
@@ -45,14 +57,20 @@ function VotingScreen() {
     // Function to handle candidate vote selection
     const handleCastVote = async (candidateId, candidateName) => {
         //1. Make smart contract function call.
-        await sendDataToBlockchain("vote", [candidateId]);
+        let receipt = await sendDataToBlockchain("vote", [candidateId]);
+        if (receipt) {
+            // 1. Make db call to make has_voted as false.
+            axios
+                .post('/voted', { voterPassport })
+                .then((res) => {
+                    // 2. After send operation is successful, Show a confirmation dialogue, maybe send email confirmation.
+                    navigate("/dashboard", { state: { data: { voterPassport } } });
 
-        //TODO
-        // 2. After send operation is successful, Show a confirmation dialogue, maybe send email confirmation.
-
-        // 3. Redirect to home screen now, the vote button should be disabled for that user.
-
-        // 4. The user should logout or choose to see that winner if he/she wants.
+                    // 3. Redirect to home screen now, the vote button should be disabled for that user now.
+                }).catch((err) => {
+                    console.error(err);
+                });
+        }
     };
 
     return (
