@@ -70,4 +70,5 @@ export const sendDataToBlockchain = async (functionName, functionParams) => {
 
     const receipt = await web3.eth.sendTransaction(txData);
     console.log(`Transaction hash: ${receipt.transactionHash}`);
+    return receipt;
 };
