@@ -4,28 +4,29 @@ References for this file:
 */
 
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
 
 export default function Dashboard() {
     const [socket, setSocket] = useState(new WebSocket('ws://localhost:8081'));
     const [electionInProgress, setElectionInProgress] = useState(false);
     const [hasAlreadyVoted, setHasAlreadyVoted] = useState(false);
+    const [voterPassport, setVoterPassport] = useState('');
 
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
-        if (location.state.data) {
+        if (location.state.data || voterPassport) {
             axios
                 .post('/voter-details', location.state.data)
                 .then((res) => {
+                    setVoterPassport(res.data.voterPassport);
                     setHasAlreadyVoted(res.data.has_voted);
                 }).catch((err) => {
                     console.error(err);
                 });
         }
-
     }, []);
 
     useEffect(() => {
@@ -63,9 +64,15 @@ export default function Dashboard() {
             alert("Election is not started by the admin yet!");
             e.preventDefault();
         } else {
-            // Open Voting Screen
-            return true;
+            // Open Voting Screen            
+            navigate("/vote", {
+                state: voterPassport
+            });
         }
+    }
+
+    const handleKnowCandidate = () => {
+        navigate('/know_candidate', { state: { voterPassport } });
     }
 
     return (
@@ -79,7 +86,7 @@ export default function Dashboard() {
                             <div className="card-image">
                                 <figure className="image is-4by3">
                                     {/* Image credits: <a href="https://www.freepik.com/free-vector/foam-fingers-pointing-happy-politician_42675003.htm#query=politician&position=1&from_view=search&track=sph">Image by Verazinha</a> on Freepik */}
-                                    <img src={process.env.PUBLIC_URL + "/images/know-candidate.jpg"} alt="Placeholder image" />
+                                    <img src={process.env.PUBLIC_URL + "/images/know-candidate.jpg"} alt="Know Candidate" />
                                 </figure>
                             </div>
                             <div className="card-content has-text-centered">
@@ -87,8 +94,11 @@ export default function Dashboard() {
                                     Know the candidates before casting vote!
                                 </div>
                             </div>
-                            <footer className="card-footer">
-                                <Link to="/know_candidate" className="title is-4 card-footer-item">Know Candidate</Link>
+                            <footer className="card-footer is-justify-content-center">
+                                <button
+                                    onClick={handleKnowCandidate}
+                                    className="button is-primary is-rounded is-large"
+                                >Know Candidate</button>
                             </footer>
                         </div>
                     </div>
@@ -97,7 +107,7 @@ export default function Dashboard() {
                             <div className="card-image">
                                 <figure className="image is-4by3">
                                     {/* Image credits: <a href="https://www.freepik.com/free-vector/hand-drawing-illustration-election-concept_2803348.htm#query=voting%20cartoon&position=5&from_view=keyword&track=ais">Image by rawpixel.com</a> on Freepik */}
-                                    <img src={process.env.PUBLIC_URL + "/images/cast-vote.jpg"} alt="Placeholder image" />
+                                    <img src={process.env.PUBLIC_URL + "/images/cast-vote.jpg"} alt="Pic for Cast Vote" />
                                 </figure>
                             </div>
                             <div className="card-content has-text-centered">
@@ -105,17 +115,20 @@ export default function Dashboard() {
                                     Cast your vote, a single vote can make a difference!
                                 </div>
                             </div>
-                            <footer className="card-footer has-text-centered">
+                            <footer className="card-footer is-justify-content-center">
                                 {
                                     hasAlreadyVoted === true ?
                                         (
-                                            <Link to="#"
-                                                className="title is-4 card-footer-item has-text-danger">Already Voted</Link>
+                                            <button
+                                                disabled={true}
+                                                className="button is-danger is-rounded is-large"
+                                            >Already Voted</button>
                                         ) :
                                         (
-                                            <Link to="/vote"
+                                            <button
                                                 onClick={votePreCheck}
-                                                className="title is-4 card-footer-item">Cast Vote</Link>
+                                                className="button is-warning is-rounded is-large"
+                                            >Cast Vote</button>
                                         )
                                 }
                             </footer>
@@ -126,7 +139,7 @@ export default function Dashboard() {
                             <div className="card-image">
                                 <figure className="image is-4by3">
                                     {/* Image credits: Image by <a href="https://www.freepik.com/free-photo/mystery-box-with-gifts-concept_36298591.htm#query=who%20won&position=18&from_view=search&track=ais">Freepik</a> */}
-                                    <img src={process.env.PUBLIC_URL + "/images/who-won.jpg"} alt="Placeholder image" />
+                                    <img src={process.env.PUBLIC_URL + "/images/who-won.jpg"} alt="Pic for Who won" />
                                 </figure>
                             </div>
                             <div className="card-content has-text-centered">
@@ -134,8 +147,10 @@ export default function Dashboard() {
                                     Get to know how did you vote turn up for the society!
                                 </div>
                             </div>
-                            <footer className="card-footer has-text-centered">
-                                <Link to="#" className="title is-4 card-footer-item">See Result</Link>
+                            <footer className="card-footer is-justify-content-center has-text-centered">
+                                <button
+                                    className="button is-warning is-rounded is-large"
+                                >See Result</button>
                             </footer>
                         </div>
                     </div>
