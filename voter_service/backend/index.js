@@ -86,7 +86,7 @@ app.post('/voter-details', authJWTToken, (req, res) => {
     const { voterPassport } = req.body;
 
     // Make database connection and check whether this email, passport and pubkey exists.
-    let is_voter_exists_query = `SELECT has_voted FROM voter WHERE passport = '${voterPassport}'`;
+    let is_voter_exists_query = `SELECT * FROM voter WHERE passport = '${voterPassport}'`;
     client.query(is_voter_exists_query, (err, result) => {
         if (err) {
             console.log(`Error => ${err.message}`);
@@ -96,15 +96,45 @@ app.post('/voter-details', authJWTToken, (req, res) => {
                 }
             );
         } else {
-            const data = result.rows.map(row => row.has_voted);
+            const data = result.rows.map(row => ({
+                voterPassport: row.passport,
+                has_voted: row.has_voted
+            }));
+
             res.status(200).json(
                 {
-                    has_voted: data[0]
+                    voterPassport: data[0].voterPassport,
+                    has_voted: data[0].has_voted,
                 }
             );
         }
     });
 
+});
+
+app.post('/voted', authJWTToken, (req, res) => {
+    const { voterPassport } = req.body;
+
+    // Make database connection and check whether this email, passport and pubkey exists.
+    let update_voter_voted = `UPDATE voter
+                            SET has_voted = true
+                            WHERE passport = '${voterPassport}'`;
+
+    client.query(update_voter_voted, (err, result) => {
+        if (err) {            
+            res.status(404).json(
+                {
+                    message: 'Voter data not found'
+                }
+            );
+        } else {
+            res.status(200).json(
+                {
+                    message: 'Voter has voted'
+                }
+            );
+        }
+    });
 });
 
 app.get('/vote', authJWTToken, (req, res) => {
@@ -126,5 +156,5 @@ app.get('/logout', (req, res) => {
 
 const PORT = 8082;
 app.listen(PORT, () => {
-    console.log(`Voter Service (Backend) is active on port ${PORT}`);
+    console.log(`Voter Service(Backend) is active on port ${PORT} `);
 });
