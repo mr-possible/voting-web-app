@@ -6,6 +6,7 @@ References for this file:
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
+import { getDataFromBlockchain } from '../services/web3Client';
 
 export default function Dashboard() {
     const [socket, setSocket] = useState(new WebSocket('ws://localhost:8081'));
@@ -68,6 +69,18 @@ export default function Dashboard() {
             navigate("/vote", {
                 state: voterPassport
             });
+        }
+    }
+
+    const resultPreCheck = async (e) => {
+        if (electionInProgress == false) {
+            // Prompt user that admin has not started the election
+            let winner = await getDataFromBlockchain("getWinner", []); 
+            let electionName = await getDataFromBlockchain("getElectionName",[])
+            alert(`Election Name => ${electionName}\nWinner => ${winner}`);         
+        } else {                        
+            alert("Let the election end!");
+            e.preventDefault();
         }
     }
 
@@ -149,6 +162,7 @@ export default function Dashboard() {
                             </div>
                             <footer className="card-footer is-justify-content-center has-text-centered">
                                 <button
+                                    onClick={resultPreCheck}
                                     className="button is-warning is-rounded is-large"
                                 >See Result</button>
                             </footer>
