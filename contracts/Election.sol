@@ -66,4 +66,18 @@ contract Election {
 
         allCandidates[_candidateId].voteCount++;
     }
+
+    function getWinner() public view returns (string memory) {
+        uint maxVotes = 0;
+        string memory electionWinner = "";
+        
+        for (uint i = 0; i < allCandidates.length; i++) {
+            if (allCandidates[i].voteCount > maxVotes) {
+                maxVotes = allCandidates[i].voteCount;
+                electionWinner = allCandidates[i].candidateName;
+            }
+        }
+        
+        return electionWinner;
+    }
 }
