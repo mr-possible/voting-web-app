@@ -10,6 +10,7 @@ const express = require('express');
 const cors = require('cors');
 const { Client } = require('pg');
 const { sendDataToBlockchain } = require('./contract_service');
+const bcrypt = require('bcrypt');
 
 const client = new Client({
     host: "localhost",
@@ -37,32 +38,35 @@ app.post('/check-voter', async (request, response) => {
 
     const { email, passportNo, voterPublicKey: voterPubKey } = request.body;
 
-    if (validVoter.passportNoPattern.test(passportNo)
-        && validVoter.voterPublicKey.test(voterPubKey)) {
+    if (validVoter.passportNoPattern.test(passportNo) &&
+        validVoter.voterPublicKey.test(voterPubKey)) {
 
         try {
             const result = await sendDataToBlockchain('authoriseVoter', voterPubKey);
             response.status(200).json({ message: 'Transaction successful', result });
 
-            let is_voter_exists_query = `SELECT * FROM voter WHERE passport = '${passportNo}'`;
-            let voter_reg_query = `INSERT INTO voter (email, passport, pubkey, has_voted)
-                                    VALUES ('${email}', '${passportNo}', '${voterPubKey}', false)`;
+            let is_voter_exists_query = `SELECT * FROM voter WHERE pubkey = '${voterPubKey}'`;
+
 
             let flag = false;
-            client.query(is_voter_exists_query, (err, res) => {
+            client.query(is_voter_exists_query, async (err, res) => {
                 if (err) {
                     console.log(`Error => ${err.message}`);
-                } else {                    
+                } else {
                     if (res.rowCount > 0) {
                         flag = true;
                     }
-                }                
-                if (flag == false) {                
+                }
+                if (flag == false) {
                     /**
                     *   Once authorised, put the voter in the database 
                     *   with initial voting status 
                     *   as false (if already entry is not there). 
                     */
+                    let voter_reg_query = `INSERT INTO voter (email, passport, pubkey, has_voted)
+                                VALUES ('${bcrypt.hashSync(email, 5)}', '${bcrypt.hashSync(passportNo, 5)}',
+                                 '${voterPubKey}', false)`;
+
                     client.query(voter_reg_query, (err, res) => {
                         if (!err) {
                             console.log('Entry made to the database!');
