@@ -13,14 +13,16 @@ function VotingScreen(props) {
     const [candidates, setCandidates] = useState([]);
     const [selectedCandidate, setSelectedCandidate] = useState(null);
     const [selectedCandidateName, setSelectedCandidateName] = useState('');
-    const [voterPassport, setVoterPassport] = useState('');
+    const [voterPublicKey, setVoterPublicKey] = useState('');
 
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
-        if (location.state) {
-            setVoterPassport(location.state);
+        if (location.state.data) {
+            const { voterPublicKey } = location.state.data;
+            let key = voterPublicKey;
+            setVoterPublicKey(key);
         }
     }, []);
 
@@ -61,10 +63,10 @@ function VotingScreen(props) {
         if (receipt) {
             // 1. Make db call to make has_voted as false.
             axios
-                .post('/voted', { voterPassport })
+                .post('/voted', { voterPublicKey })
                 .then((res) => {
-                    // 2. After send operation is successful, Show a confirmation dialogue, maybe send email confirmation.
-                    navigate("/dashboard", { state: { data: { voterPassport } } });
+                    // 2. After send operation is successful, TODO: Show a confirmation dialogue, maybe send email confirmation.
+                    navigate("/dashboard", { state: { data: { voterPublicKey } } });
 
                     // 3. Redirect to home screen now, the vote button should be disabled for that user now.
                 }).catch((err) => {

@@ -12,17 +12,17 @@ export default function Dashboard() {
     const [socket, setSocket] = useState(new WebSocket('ws://localhost:8081'));
     const [electionInProgress, setElectionInProgress] = useState(false);
     const [hasAlreadyVoted, setHasAlreadyVoted] = useState(false);
-    const [voterPassport, setVoterPassport] = useState('');
+    const [voterPublicKey, setVoterPublicKey] = useState('');
 
     const navigate = useNavigate();
     const location = useLocation();
 
     useEffect(() => {
-        if (location.state.data || voterPassport) {
+        if (location.state.data || voterPublicKey) {
             axios
                 .post('/voter-details', location.state.data)
                 .then((res) => {
-                    setVoterPassport(res.data.voterPassport);
+                    setVoterPublicKey(res.data.voterPublicKey);
                     setHasAlreadyVoted(res.data.has_voted);
                 }).catch((err) => {
                     console.error(err);
@@ -65,10 +65,8 @@ export default function Dashboard() {
             alert("Election is not started by the admin yet!");
             e.preventDefault();
         } else {
-            // Open Voting Screen            
-            navigate("/vote", {
-                state: voterPassport
-            });
+            // Open Voting Screen
+            navigate("/vote", { state: { data: { voterPublicKey: String(voterPublicKey) } } });
         }
     }
 
@@ -85,7 +83,7 @@ export default function Dashboard() {
     }
 
     const handleKnowCandidate = () => {
-        navigate('/know_candidate', { state: { voterPassport } });
+        navigate('/know_candidate', { state: { voterPublicKey } });
     }
 
     return (

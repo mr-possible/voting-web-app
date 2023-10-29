@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function VoterLogin() {
     const [voterEmail, setVoterEmail] = useState('');
     const [voterPassport, setVoterPassport] = useState('');
-    const [voterPubKey, setVoterPubKey] = useState('');
+    const [voterPublicKey, setVoterPublicKey] = useState('');
 
     const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ export default function VoterLogin() {
                     {
                         email: voterEmail,
                         passportNo: voterPassport,
-                        voterPublicKey: voterPubKey
+                        voterPublicKey: voterPublicKey
                     }
                 ),
             });
@@ -31,7 +31,7 @@ export default function VoterLogin() {
                 axios
                     .get('/dashboard')
                     .then((res) => {
-                        navigate("/dashboard", { state: { data: { voterEmail, voterPassport, voterPubKey } } });
+                        navigate("/dashboard", { state: { data: { voterEmail, voterPassport, voterPublicKey } } });
                     })
                     .catch(err => {
                         throw err;
@@ -91,8 +91,8 @@ export default function VoterLogin() {
                                                 id="voterPubKey"
                                                 type="password"
                                                 className="input"
-                                                value={voterPubKey}
-                                                onChange={(e) => setVoterPubKey(e.target.value)}
+                                                value={voterPublicKey}
+                                                onChange={(e) => setVoterPublicKey(e.target.value)}
                                                 required />
                                         </div>
                                     </div>

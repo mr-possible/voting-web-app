@@ -41,7 +41,7 @@ function authJWTToken(request, response, next) {
 }
 
 /************************************ API ENDPOINTS ************************************/
-app.post('/login', (request, response) => {
+app.post('/login', async (request, response) => {
     const { email, passportNo, voterPublicKey } = request.body;
     voter = { email, passportNo, voterPublicKey }
 
@@ -83,10 +83,10 @@ app.get('/dashboard', authJWTToken, (req, res) => {
 });
 
 app.post('/voter-details', authJWTToken, (req, res) => {
-    const { voterPassport } = req.body;
+    const { voterPublicKey } = req.body;
 
     // Make database connection and check whether this email, passport and pubkey exists.
-    let is_voter_exists_query = `SELECT * FROM voter WHERE passport = '${voterPassport}'`;
+    let is_voter_exists_query = `SELECT * FROM voter WHERE pubkey = '${voterPublicKey}'`;
     client.query(is_voter_exists_query, (err, result) => {
         if (err) {
             console.log(`Error => ${err.message}`);
@@ -97,13 +97,13 @@ app.post('/voter-details', authJWTToken, (req, res) => {
             );
         } else {
             const data = result.rows.map(row => ({
-                voterPassport: row.passport,
+                voterPublicKey: String(row.pubkey),
                 has_voted: row.has_voted
             }));
 
             res.status(200).json(
                 {
-                    voterPassport: data[0].voterPassport,
+                    voterPublicKey: data[0].voterPublicKey,
                     has_voted: data[0].has_voted,
                 }
             );
@@ -113,15 +113,15 @@ app.post('/voter-details', authJWTToken, (req, res) => {
 });
 
 app.post('/voted', authJWTToken, (req, res) => {
-    const { voterPassport } = req.body;
+    const { voterPublicKey } = req.body;
 
     // Make database connection and check whether this email, passport and pubkey exists.
     let update_voter_voted = `UPDATE voter
                             SET has_voted = true
-                            WHERE passport = '${voterPassport}'`;
+                            WHERE pubkey = '${voterPublicKey}'`;
 
     client.query(update_voter_voted, (err, result) => {
-        if (err) {            
+        if (err) {
             res.status(404).json(
                 {
                     message: 'Voter data not found'
