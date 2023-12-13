@@ -10,7 +10,6 @@ contract Election {
     }
 
     struct Voter {
-        string voterName;
         uint256 candidateVotedFor;
         bool isValid;
         bool hasAlreadyVoted;
