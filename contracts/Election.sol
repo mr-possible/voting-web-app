@@ -1,7 +1,12 @@
+/**
+Reference & Credits
+    https://github.com/akmadan/voting_dapp
+    https://docs.soliditylang.org/en/v0.8.18/
+ */
+
+
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.5.0 <0.9.0;
-
-// Reference & Credits: https://github.com/akmadan/voting_dapp
 
 contract Election {
     struct Candidate {

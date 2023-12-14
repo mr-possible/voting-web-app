@@ -1,3 +1,5 @@
+// References: https://trufflesuite.com/docs/truffle/
+
 module.exports = {
   networks: {
     development: {

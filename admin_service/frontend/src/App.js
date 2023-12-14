@@ -1,8 +1,11 @@
 /**
- * Reference:
- * https://www.npmjs.com/package/ws
- * https://bulma.io/documentation/
- *  */
+ * Reference/Credits for this file:
+ * Node & Websocket : https://www.npmjs.com/package/ws
+ * Bulma CSS: https://bulma.io/documentation/
+ * React: https://react.dev/learn
+ * Javascript: https://developer.mozilla.org/en-US/docs/Web/JavaScript    
+ * */
+
 import React, { useState, useEffect } from 'react';
 import { BACKEND_HOST, WEBSOCKET_URL } from './utils/constants';
 import AddCandidate from './components/candidate';

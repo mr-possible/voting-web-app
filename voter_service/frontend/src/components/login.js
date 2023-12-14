@@ -1,3 +1,10 @@
+/*
+References/Credits for this file:   
+    Javascript: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+    React: https://react.dev/learn
+    Bulma CSS: https://bulma.io/documentation/
+*/
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';

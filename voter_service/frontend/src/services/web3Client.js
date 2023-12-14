@@ -1,3 +1,9 @@
+/*
+References for this file:   
+    Javascript: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+    web3js: https://web3js.readthedocs.io/en/v1.10.0/    
+*/
+
 import CompiledSmartContract from 'truffle-artifacts';
 import Web3 from 'web3';
 

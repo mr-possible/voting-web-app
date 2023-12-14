@@ -1,3 +1,8 @@
+/*
+References/Credits for this file:       
+    React: https://react.dev/learn    
+*/
+
 import Header from "./components/header";
 import Footer from "./components/footer";
 import { Outlet } from "react-router-dom";

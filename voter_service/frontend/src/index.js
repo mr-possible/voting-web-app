@@ -1,3 +1,8 @@
+/*
+References/Credits for this file:       
+    React: https://react.dev/learn 
+*/
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';

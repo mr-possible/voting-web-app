@@ -1,3 +1,10 @@
+/*
+References/Credits for this file:   
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript
+    https://react.dev/learn
+    Bulma CSS: https://bulma.io/documentation/
+*/
+
 import React, { useState } from 'react';
 import { BACKEND_HOST } from '../utils/constants';
 

@@ -1,5 +1,7 @@
 /*
-References for this file:   
+References/Credits for this file:   
+    Javascript: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+    React: https://react.dev/learn
     Bulma CSS: https://bulma.io/documentation/
 */
 

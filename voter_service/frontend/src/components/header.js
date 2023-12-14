@@ -1,5 +1,7 @@
 /*
 References/Credits for this file:   
+    Javascript: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+    React: https://react.dev/learn
     Bulma CSS: https://bulma.io/documentation/
 */
 
@@ -44,7 +46,7 @@ export default function Header() {
                 </div>
                 <div id="navbarBasicExample" className="navbar-menu">
                     <div className="navbar-start">
-                        <Link to="/" className="navbar-item" >Home</Link>
+                        {/* <Link to="/" className="navbar-item" >Home</Link> */}                        
                         <Link to="/aboutme" className="navbar-item">Developer Info</Link>
                     </div>
                     <div className="navbar-end">

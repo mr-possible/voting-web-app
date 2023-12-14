@@ -1,5 +1,7 @@
 /*
 References/Credits for this file:   
+    Javascript: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+    React: https://react.dev/learn
     Bulma CSS: https://bulma.io/documentation/
 */
 
@@ -44,8 +46,7 @@ function VotingScreen(props) {
     }, []);
 
     // Function to handle candidate selection
-    const handleSelectCandidate = (candidateId, candidateName) => {
-        // Implement your logic here when a candidate is selected
+    const handleSelectCandidate = (candidateId, candidateName) => {        
         setSelectedCandidate(candidateId);
         setSelectedCandidateName(candidateName);
     };
@@ -108,11 +109,11 @@ function VotingScreen(props) {
                         <button
                             className="button is-warning is-large"
                             onClick={handleReset}
-                            disabled={selectedCandidate ? false : true}>Reset Choice</button>
+                            disabled={selectedCandidate != null ? false : true}>Reset Choice</button>
                         <button
                             className="button is-info is-large"
                             onClick={() => handleCastVote(selectedCandidate, selectedCandidateName)}
-                            disabled={selectedCandidate ? false : true}>Cast Your Vote</button>
+                            disabled={selectedCandidate != null ? false : true}>Cast Your Vote</button>
                     </div>
                 </div>
             </div>

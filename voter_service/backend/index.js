@@ -1,3 +1,10 @@
+/**
+ * References for this file:
+ * DB connection: https://www.kindsonthegenius.com/db-migrate-simplified-how-to-generate-posgresql-database-from-node-js/
+ * Javascript: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+ * Express: https://expressjs.com
+ */
+
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
