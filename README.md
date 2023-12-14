@@ -57,7 +57,7 @@ This is a voting dApp built using React (frontend) and Node (backend) with Postg
 
 - Once installed, please keep a note of the `username` and `password` that you setup it with as both will be used in making the connection to the database.
 
-- Make a database named as `voting_webapp` with a voter table having columns - TODO.
+- Make a database named as `voting_webapp` with a voter table having columns as in `table.sql` in the root location of this project. Please use this in order to create the table with correct column names.
 
 ## Setting up the Admin Service
 
