@@ -10,13 +10,14 @@ const cors = require('cors');
 const { Client } = require('pg');
 const { sendDataToBlockchain } = require('./contract_service');
 const bcrypt = require('bcrypt');
+require('dotenv').config();
 
 const client = new Client({
-    host: "localhost",
-    port: 5432,
-    user: "sambhavdave",
-    password: "sambhav",
-    database: "voting_webapp"
+    host: process.env.host,
+    port: process.env.port,
+    user: process.env.username,
+    password: process.env.password,
+    database: process.env.database
 });
 client.connect();
 
@@ -115,7 +116,7 @@ app.post('/who-is-the-winner', (request, response) => {
     //TODO
 });
 
-const PORT = 8080;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Admin Service is active on port ${PORT}`);
 });

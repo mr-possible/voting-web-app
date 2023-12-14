@@ -11,16 +11,19 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const { Client } = require('pg');
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+
 
 const secret_key = "csm20-secret-key";
 let voter = {};
 
 const client = new Client({
-    host: "localhost",
-    port: 5432,
-    user: "sambhavdave",
-    password: "sambhav",
-    database: "voting_webapp"
+    host: process.env.host,
+    port: process.env.port,
+    user: process.env.username,
+    password: process.env.password,
+    database: process.env.database
 });
 client.connect();
 
@@ -161,7 +164,7 @@ app.get('/logout', (req, res) => {
     );
 });
 
-const PORT = 8082;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
-    console.log(`Voter Service(Backend) is active on port ${PORT} `);
+    console.log(`Voter Service(Backend) is active on port ${PORT} `);    
 });
