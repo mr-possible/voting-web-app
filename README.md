@@ -2,7 +2,6 @@
 
 Name - Sambhav Dave <br>
 Student Id - 2267358 <br>
-Email - 2267358@swansea.ac.uk <br>
 
 This is a voting dApp built using React (frontend) and Node (backend) with PostgresDB for storing voter information. Blockchain test network used is offered by Ganache. Used Metamask as wallet for doing transactions in a simulated environment of Ganache.
 
